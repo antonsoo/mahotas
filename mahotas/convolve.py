@@ -122,7 +122,8 @@ def convolve1d(
         raise ValueError('mahotas.convolve1d: only 1-D sequences allowed')
     _check_mode(mode, cval, 'convolve1d')
     axis = _get_axis(f, axis, 'convolve1d')
-    if len(weights) == 1 and f.dtype.kind in 'buif':
+    if (len(weights) == 1 and f.dtype.kind in 'buif'
+            and f.dtype.type is not np.float16):
         out = _get_output(f, out, 'convolve1d')
         weight = weights.astype(f.dtype, copy=False)[0]
         return np.multiply(f, weight, dtype=np.double, out=out, casting='unsafe')

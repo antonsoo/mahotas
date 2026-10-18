@@ -81,6 +81,15 @@ def test_convolve1d_single_tap_singleton_axis():
         convolve1d(image, 1, 0)
 
 
+@pytest.mark.parametrize('shape', [(1, 5), (5, 5)])
+@pytest.mark.parametrize('axis', [0, -1])
+@pytest.mark.parametrize('weights', [[1.0], [1.0, 1.0, 1.0]])
+def test_convolve1d_rejects_float16(shape, axis, weights):
+    image = np.ones(shape, dtype=np.float16)
+    with pytest.raises(TypeError, match='Mahotas does not support float16'):
+        convolve1d(image, weights, axis)
+
+
 @pytest.mark.parametrize('dtype', [np.uint8, np.int16, np.float32, np.float64])
 @pytest.mark.parametrize('axis', [0, -1])
 @pytest.mark.parametrize('layout', ['c', 'fortran', 'strided', 'singleton'])
